@@ -22,8 +22,8 @@ public class Board {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name = "MEMBER_ID", nullable = false),
-            @JoinColumn(name = "MEMBER_SEQ", nullable = false)
+            @JoinColumn(name = "MEMBER_ID", referencedColumnName = "MEMBER_ID", nullable = false),
+            @JoinColumn(name = "MEMBER_SEQ", referencedColumnName = "MEMBER_SEQ", nullable = false)
     })
     private Member member;
 //
