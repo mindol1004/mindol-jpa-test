@@ -22,8 +22,8 @@ public class Board {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name = "MEMBER_ID"),
-            @JoinColumn(name = "MEMBER_SEQ")
+            @JoinColumn(name = "MEMBER_ID", nullable = false),
+            @JoinColumn(name = "MEMBER_SEQ", nullable = false)
     })
     private Member member;
 //
@@ -34,7 +34,17 @@ public class Board {
     public Board(String boardTitle, Member member) {
         this.boardTitle = boardTitle;
         this.member = member;
-        //member.getBoards().add(this);
+    }
+
+    public void setMember(Member member) {
+        if(this.member != null) {
+            this.member.getBoards().remove(this);
+        }
+        this.member = member;
+
+        if(member != null) {
+            member.getBoards().add(this);
+        }
     }
 
 }

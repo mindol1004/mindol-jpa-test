@@ -30,7 +30,9 @@ public class MemberService {
         final Member member = dto.toEntity();
 
         dto.getBoards().forEach(boardDto -> {
-            Board board = Board.builder().member(member).boardTitle(boardDto.getBoardTitle()).build();
+            Board board = Board.builder()
+                    .boardTitle(boardDto.getBoardTitle())
+                    .build();
             member.addBoard(board);
         });
 

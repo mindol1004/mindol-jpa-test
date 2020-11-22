@@ -46,6 +46,7 @@ public class Member implements Serializable {
 
     public void addBoard(Board board) {
         this.boards.add(board);
+        board.setMember(this);
     }
 
     /*
