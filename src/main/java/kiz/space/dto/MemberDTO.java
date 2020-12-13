@@ -14,11 +14,21 @@ import java.util.stream.Collectors;
 public class MemberDTO {
 
     @Getter
+    @Setter
+    public static class Search {
+        private Long memberSeq;
+        private String memberName;
+        private Integer[] number;
+        private String[] str;
+    }
+
+    @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Save {
         private Long memberSeq;
         private String memberName;
         private Set<BoardDto> boards;
+        private Integer[] number;
 
         public Member toEntity() {
             return Member.builder()

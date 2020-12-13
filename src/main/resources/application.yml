@@ -29,11 +29,23 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       use-new-id-generator-mappings: false
     properties:
       hibernate:
         format_sql: true
+        show_sql: true
+
+  thymeleaf:
+    prefix: classpath:templates/
+    check-template-location: true
+    suffix: .html
+    mode: HTML5
+    cache: false
+    order: 0
+  resources:
+    static-locations:
+      - classpath:/static/
 
 logging:
   level:
