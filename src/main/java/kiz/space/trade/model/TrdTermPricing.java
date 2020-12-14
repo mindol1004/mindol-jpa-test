@@ -1,5 +1,6 @@
 package kiz.space.trade.model;
 
+import kiz.space.trade.dto.TrdTermPricingDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,30 +20,42 @@ public class TrdTermPricing implements Serializable {
     @Column(name = "TERM_PRICING_NUM")
     private Long termPricingNum;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TERM_NUM")
+    private TrdTerm trdTerm;
+
     @Column(name = "TRADE_NUM")
     private Long tradeNum;
-    @Column(name = "TERM_NUM")
-    private Long termNum;
+
     @Column(name = "TERM_PRICING_CD")
     private String termPricingCd;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name = "TRADE_NUM", referencedColumnName = "TRADE_NUM"),
-            @JoinColumn(name = "TERM_NUM", referencedColumnName = "TERM_NUM"),
-            @JoinColumn(name = "TERM_PRICING_NUM", referencedColumnName = "TERM_PRICING_NUM")
-    })
+    @OneToMany(mappedBy = "trdTerm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<TrdTermPricingComp> trdTermPricingComp = new HashSet<>();
 
     @Builder
     public TrdTermPricing(
             Long tradeNum,
-            Long termNum,
             String termPricingCd
     ) {
         this.tradeNum = tradeNum;
-        this.termNum = termNum;
         this.termPricingCd = termPricingCd;
+    }
+
+    public void trdTermPricingUpdate(TrdTermPricingDTO.Req dto) {
+        this.termPricingCd = dto.getTermPricingCd();
+    }
+
+    public void setTrdTerm(TrdTerm trdTerm) {
+        this.trdTerm = trdTerm;
+        if(trdTerm != null) {
+            trdTerm.getTrdTermPricing().add(this);
+        }
+    }
+
+    public void addTermPricingComp(TrdTermPricingComp trdTermPricingComp) {
+        this.trdTermPricingComp.add(trdTermPricingComp);
+        trdTermPricingComp.setTrdTermPricing(this);
     }
 
 }

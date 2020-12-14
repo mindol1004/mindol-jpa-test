@@ -1,7 +1,6 @@
 package kiz.space.trade.dto;
 
-import kiz.space.trade.model.TrdHeader;
-import kiz.space.trade.model.TrdTermPricing;
+import kiz.space.trade.model.TrdTermPricingComp;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,10 +8,9 @@ import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TrdTermPricingDTO {
+public class TrdTermPricingCompDTO {
 
     @Getter
     @Setter
@@ -25,14 +23,12 @@ public class TrdTermPricingDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Req {
         private Long tradeNum;
-        private String termPricingCd;
+        private String termPricingCompCd;
 
-        private Set<TrdTermPricingCompDTO.Req> trdTermPricingComp;
-
-        public TrdTermPricing toEntity() {
-            return TrdTermPricing.builder()
+        public TrdTermPricingComp toEntity() {
+            return TrdTermPricingComp.builder()
                     .tradeNum(tradeNum)
-                    .termPricingCd(termPricingCd)
+                    .termPricingCompCd(termPricingCompCd)
                     .build();
         }
     }
@@ -42,14 +38,14 @@ public class TrdTermPricingDTO {
     public static class Res {
         private Long tradeNum;
 
-        public static TrdTermPricingDTO.Res of(TrdTermPricing trdTermPricing) {
+        public static TrdTermPricingCompDTO.Res of(TrdTermPricingComp trdTermPricingComp) {
             ModelMapper modelMapper = new ModelMapper();
-            return modelMapper.map(trdTermPricing, TrdTermPricingDTO.Res.class);
+            return modelMapper.map(trdTermPricingComp, TrdTermPricingCompDTO.Res.class);
         }
 
-        public static List<TrdTermPricingDTO.Res> of(List<TrdTermPricing> trdTermPricing) {
-            return trdTermPricing.stream()
-                    .map(TrdTermPricingDTO.Res::of)
+        public static List<TrdTermPricingCompDTO.Res> of(List<TrdTermPricingComp> trdTermPricingComp) {
+            return trdTermPricingComp.stream()
+                    .map(TrdTermPricingCompDTO.Res::of)
                     .collect(Collectors.toList());
         }
     }

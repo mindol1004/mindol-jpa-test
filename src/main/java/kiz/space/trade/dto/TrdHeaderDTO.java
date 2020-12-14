@@ -25,12 +25,16 @@ public class TrdHeaderDTO {
     public static class Req {
         private Long tradeNum;
         private Integer tradeType;
+        private String tradeCd;
+
+        private Set<TrdHeaderDTO.Req> trdHeader;
         private Set<TrdTermDTO.Req> trdTerm;
 
         public TrdHeader toEntity() {
             return TrdHeader.builder()
                     .tradeNum(tradeNum)
                     .tradeType(tradeType)
+                    .tradeCd(tradeCd)
                     .build();
         }
     }
