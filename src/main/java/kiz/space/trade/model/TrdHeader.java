@@ -51,15 +51,18 @@ public class TrdHeader implements Serializable {
     public TrdHeader(
             Long tradeNum,
             Integer tradeType,
-            String tradeCd
+            String tradeCd,
+            Set<TrdTerm> trdTerms
     ) {
         this.tradeNum = tradeNum;
         this.tradeType = tradeType;
         this.tradeCd = tradeCd;
+        this.trdTerms = trdTerms;
     }
 
-    public void trdHeaderUpdate(TrdHeaderDTO.Req dto) {
+    public void trdHeaderUpdate(TrdHeaderDTO.Req dto, Set<TrdTerm> trdTerms) {
         this.tradeCd = dto.getTradeCd();
+        this.trdTerms = trdTerms;
     }
 
     public void addTrdTerm(TrdTerm trdTerm) {

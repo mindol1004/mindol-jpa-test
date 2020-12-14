@@ -25,6 +25,7 @@ public class TrdTermDTO {
     @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Req {
+        private Long termNum;
         private Long tradeNum;
         private Integer tradeType;
         private String termCd;
