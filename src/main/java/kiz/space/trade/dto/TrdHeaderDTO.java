@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TrdHeaderDTO {
@@ -31,15 +28,24 @@ public class TrdHeaderDTO {
 
         private Set<TrdHeaderDTO.Req> trdHeader;
         private Set<TrdTermDTO.Req> trdTerm;
+        //private TrdTermSpecDTO.Req trdTermSpec;
 
         public TrdHeader toEntity() {
             return TrdHeader.builder()
                     .tradeNum(tradeNum)
                     .tradeType(tradeType)
                     .tradeCd(tradeCd)
-                    .trdTerms(trdTerm.stream().map(n -> {
-                        return n.toEntity();
-                    }).collect(Collectors.toSet()))
+                    .trdTerms(
+                        Optional.ofNullable(trdTerm)
+                            .map(n -> {
+                                return n.stream().map(i -> {
+                                    i.setTradeNum(tradeNum);
+                                    i.setTradeType(tradeType);
+                                    //i.setTrdTermSpec(trdTermSpec);
+                                    return i.toEntity();
+                                }).collect(Collectors.toSet());
+                            }).orElse(new HashSet<>())
+                    )
                     .build();
         }
     }

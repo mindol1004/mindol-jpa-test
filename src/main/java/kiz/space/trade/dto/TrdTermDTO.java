@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,12 +31,38 @@ public class TrdTermDTO {
         private Long tradeNum;
         private Integer tradeType;
         private String termCd;
+
+        private TrdTermSpecDTO.Req trdTermSpec;
         private Set<TrdTermPricingDTO.Req> trdTermPricing;
 
         public TrdTerm toEntity() {
             return TrdTerm.builder()
                     .trdHeader(TrdHeader.builder().tradeNum(tradeNum).tradeType(tradeType).build())
                     .termCd(this.termCd)
+                    .trdTermPricing(
+                        Optional.ofNullable(trdTermPricing)
+                                .map(n -> {
+                                        return n.stream().map(i -> {
+                                            i.setTradeNum(tradeNum);
+                                            return i.toEntity();
+                                        }).collect(Collectors.toSet());
+                                    }).orElse(new HashSet<>())
+                    )
+                    .trdTermSpec(
+//                            Optional.ofNullable(trdTermSpec)
+//                                    .map(n -> {
+//                                        return n.stream().map(i -> {
+//                                            i.setTradeNum(tradeNum);
+//                                            return i.toEntity();
+//                                        }).collect(Collectors.toSet());
+//                                    }).orElse(new HashSet<>())
+                            Optional.ofNullable(trdTermSpec)
+                                    .map(n -> {
+                                        //n.setTermNum(termNum);
+                                        n.setTradeNum(tradeNum);
+                                        return n.toEntity();
+                                    }).orElse(null)
+                    )
                     .build();
         }
     }

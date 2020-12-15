@@ -31,6 +31,9 @@ public class TrdTerm implements Serializable {
     @Column(name = "TERM_CD")
     private String termCd;
 
+    @OneToOne(mappedBy = "trdTerm", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    private TrdTermSpec trdTermSpec;
+
     @OneToMany(mappedBy = "trdTerm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<TrdTermPricing> trdTermPricing = new HashSet<>();
 
@@ -40,16 +43,30 @@ public class TrdTerm implements Serializable {
     @Builder
     public TrdTerm(
             TrdHeader trdHeader,
-            String termCd
+            String termCd,
+            TrdTermSpec trdTermSpec,
+            Set<TrdTermPricing> trdTermPricing
     ) {
         this.trdHeader = trdHeader;
         this.termCd = termCd;
+        this.setTrdTermSpec(trdTermSpec);
+        this.trdTermPricing = trdTermPricing;
     }
 
     public void setTrdHeader(TrdHeader trdHeader) {
         this.trdHeader = trdHeader;
         if(trdHeader != null) {
             trdHeader.getTrdTerms().add(this);
+        }
+    }
+
+    public void setTrdTermSpec(TrdTermSpec trdTermSpec) {
+        if(this.trdTermSpec!=null) {
+            this.trdTermSpec.setTrdTerm(null);
+        }
+        this.trdTermSpec = trdTermSpec;
+        if(trdTermSpec!=null){
+            trdTermSpec.setTrdTerm(this);
         }
     }
 

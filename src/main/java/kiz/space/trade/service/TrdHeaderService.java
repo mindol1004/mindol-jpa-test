@@ -34,7 +34,29 @@ public class TrdHeaderService {
     public void save(TrdHeaderDTO.Req dto) {
 
         for (TrdHeaderDTO.Req req : dto.getTrdHeader()) {
-            final TrdHeader trdHeader = req.toEntity();
+
+            TrdHeader trdHeader =  req.toEntity();
+
+//            Optional<Set<TrdTermDTO.Req>> trdTerms = Optional.ofNullable(req.getTrdTerm());
+//
+//            trdTerms.ifPresent(list -> list.forEach(item -> {
+//                final TrdTerm trdTerm = item.toEntity();
+//                trdTerm.addTrdTermSpec(item.getTrdTermSpec().toEntity());
+//            }));
+
+            //TrdHeader trdHeader =  req.toEntity();
+
+            trdHeaderRepository.save(req.toEntity());
+
+//            Set<TrdTerm> trdTerm = req.getTrdTerm().stream().map(n -> {
+//                n.setTradeNum(req.getTradeNum());
+//                n.setTradeType(req.getTradeType());
+//                return n.toEntity();
+//            }).collect(Collectors.toSet());
+//
+//            System.out.println(trdTerm.toString());
+
+            //final TrdHeader trdHeader = req.toEntity();
 
 //            Optional<Set<TrdTermDTO.Req>> trdTerms = Optional.ofNullable(req.getTrdTerm());
 //
@@ -58,7 +80,7 @@ public class TrdHeaderService {
 //                trdHeader.addTrdTerm(trdTerm);
 //            }));
 
-            trdHeaderRepository.save(trdHeader);
+            //trdHeaderRepository.save(trdHeader);
         }
 
     }
