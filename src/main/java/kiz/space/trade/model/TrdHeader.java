@@ -65,8 +65,8 @@ public class TrdHeader implements Serializable {
         this.trdTerms = trdTerms;
     }
 
-    public void addTrdTerm(TrdTerm trdTerm) {
-        this.trdTerms.add(trdTerm);
-        trdTerm.setTrdHeader(this);
-    }
+//    public void addTrdTerm(TrdTerm trdTerm) {
+//        this.trdTerms.add(trdTerm);
+//        trdTerm.setTrdHeader(this);
+//    }
 }

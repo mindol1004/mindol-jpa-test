@@ -1,5 +1,6 @@
 package kiz.space.trade.dto;
 
+import kiz.space.trade.model.TrdTerm;
 import kiz.space.trade.model.TrdTermSpec;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,13 +23,11 @@ public class TrdTermSpecDTO {
     @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Req {
-        //private Long termNum;
         private Long tradeNum;
         private String termSpecCd;
 
         public TrdTermSpec toEntity() {
             return TrdTermSpec.builder()
-                    //.termNum(termNum)
                     .tradeNum(tradeNum)
                     .termSpecCd(termSpecCd)
                     .build();

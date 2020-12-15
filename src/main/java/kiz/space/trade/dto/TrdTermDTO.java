@@ -27,7 +27,6 @@ public class TrdTermDTO {
     @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Req {
-        private Long termNum;
         private Long tradeNum;
         private Integer tradeType;
         private String termCd;
@@ -39,29 +38,21 @@ public class TrdTermDTO {
             return TrdTerm.builder()
                     .trdHeader(TrdHeader.builder().tradeNum(tradeNum).tradeType(tradeType).build())
                     .termCd(this.termCd)
+                    .trdTermSpec(
+                        Optional.ofNullable(trdTermSpec)
+                            .map(n -> {
+                                n.setTradeNum(tradeNum);
+                                return n.toEntity();
+                            }).orElseGet(() -> null)
+                    )
                     .trdTermPricing(
                         Optional.ofNullable(trdTermPricing)
-                                .map(n -> {
-                                        return n.stream().map(i -> {
-                                            i.setTradeNum(tradeNum);
-                                            return i.toEntity();
-                                        }).collect(Collectors.toSet());
-                                    }).orElse(new HashSet<>())
-                    )
-                    .trdTermSpec(
-//                            Optional.ofNullable(trdTermSpec)
-//                                    .map(n -> {
-//                                        return n.stream().map(i -> {
-//                                            i.setTradeNum(tradeNum);
-//                                            return i.toEntity();
-//                                        }).collect(Collectors.toSet());
-//                                    }).orElse(new HashSet<>())
-                            Optional.ofNullable(trdTermSpec)
-                                    .map(n -> {
-                                        //n.setTermNum(termNum);
-                                        n.setTradeNum(tradeNum);
-                                        return n.toEntity();
-                                    }).orElse(null)
+                            .map(n -> {
+                                return n.stream().map(i -> {
+                                    i.setTradeNum(tradeNum);
+                                    return i.toEntity();
+                                }).collect(Collectors.toSet());
+                            }).orElseGet(() -> new HashSet<>())
                     )
                     .build();
         }

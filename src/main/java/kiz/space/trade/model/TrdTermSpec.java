@@ -16,15 +16,11 @@ public class TrdTermSpec implements Serializable {
 
     @Id
     @Column(name = "TERM_NUM")
-    @GeneratedValue(generator="SharedPrimaryKeyGenerator")
-    @GenericGenerator(name="SharedPrimaryKeyGenerator",
-            strategy="foreign",
-            parameters = @org.hibernate.annotations.Parameter(name="property", value="trdTerm")
-    )
     private Long termNum;
 
+    @MapsId
     @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "TERM_NUM",referencedColumnName="TERM_NUM")
+    @JoinColumn(name = "TERM_NUM", referencedColumnName = "TERM_NUM")
     private TrdTerm trdTerm;
 
     @Column(name = "TRADE_NUM")
@@ -35,11 +31,9 @@ public class TrdTermSpec implements Serializable {
 
     @Builder
     public TrdTermSpec(
-            TrdTerm trdTerm,
             Long tradeNum,
             String termSpecCd
     ) {
-        this.trdTerm = trdTerm;
         this.tradeNum = tradeNum;
         this.termSpecCd = termSpecCd;
     }

@@ -36,15 +36,17 @@ public class TrdTermPricingComp implements Serializable {
     @Builder
     public TrdTermPricingComp(
             Long tradeNum,
+            TrdTerm trdTerm,
             String termPricingCompCd
     ) {
         this.tradeNum = tradeNum;
+        this.trdTerm = trdTerm;
         this.termPricingCompCd = termPricingCompCd;
     }
 
-    public void trdTermPricingCompUpdate(TrdTermPricingCompDTO.Req dto) {
-        this.termPricingCompCd = dto.getTermPricingCompCd();
-    }
+//    public void trdTermPricingCompUpdate(TrdTermPricingCompDTO.Req dto) {
+//        this.termPricingCompCd = dto.getTermPricingCompCd();
+//    }
 
     public void setTrdTerm(TrdTerm trdTerm) {
         this.trdTerm = trdTerm;

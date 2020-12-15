@@ -20,6 +20,7 @@ public class TrdHeaderDTO {
     }
 
     @Getter
+    @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Req {
         private Long tradeNum;
@@ -27,8 +28,8 @@ public class TrdHeaderDTO {
         private String tradeCd;
 
         private Set<TrdHeaderDTO.Req> trdHeader;
+
         private Set<TrdTermDTO.Req> trdTerm;
-        //private TrdTermSpecDTO.Req trdTermSpec;
 
         public TrdHeader toEntity() {
             return TrdHeader.builder()
@@ -41,10 +42,9 @@ public class TrdHeaderDTO {
                                 return n.stream().map(i -> {
                                     i.setTradeNum(tradeNum);
                                     i.setTradeType(tradeType);
-                                    //i.setTrdTermSpec(trdTermSpec);
                                     return i.toEntity();
                                 }).collect(Collectors.toSet());
-                            }).orElse(new HashSet<>())
+                            }).orElseGet(() -> new HashSet<>())
                     )
                     .build();
         }

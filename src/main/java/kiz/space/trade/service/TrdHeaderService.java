@@ -35,7 +35,7 @@ public class TrdHeaderService {
 
         for (TrdHeaderDTO.Req req : dto.getTrdHeader()) {
 
-            TrdHeader trdHeader =  req.toEntity();
+            //Long termNum = trdHeaderRepository.getTermNum();
 
 //            Optional<Set<TrdTermDTO.Req>> trdTerms = Optional.ofNullable(req.getTrdTerm());
 //
@@ -85,40 +85,40 @@ public class TrdHeaderService {
 
     }
 
-    @Transactional
-    public void update(TrdHeaderDTO.Req dto) {
+//    @Transactional
+//    public void update(TrdHeaderDTO.Req dto) {
+//
+//        for (TrdHeaderDTO.Req req : dto.getTrdHeader()) {
+//
+//            TrdHeader.TrdHeaderPk pk = TrdHeader.TrdHeaderPk.builder().tradeNum(req.getTradeNum()).tradeType(req.getTradeType()).build();
+//            final TrdHeader trdHeader = trdHeaderRepository.findOne(pk);
+//
+//            if (trdHeader == null) {
+//                throw new IllegalArgumentException("Data Not Found");
+//            }
+//
+//            trdHeader.trdHeaderUpdate(req, this.getTrdTermList(req.getTrdTerm()));
+//
+//        }
+//
+//    }
 
-        for (TrdHeaderDTO.Req req : dto.getTrdHeader()) {
-
-            TrdHeader.TrdHeaderPk pk = TrdHeader.TrdHeaderPk.builder().tradeNum(req.getTradeNum()).tradeType(req.getTradeType()).build();
-            final TrdHeader trdHeader = trdHeaderRepository.findOne(pk);
-
-            if (trdHeader == null) {
-                throw new IllegalArgumentException("Data Not Found");
-            }
-
-            trdHeader.trdHeaderUpdate(req, this.getTrdTermList(req.getTrdTerm()));
-
-        }
-
-    }
-
-    private Set<TrdTerm> getTrdTermList(Set<TrdTermDTO.Req> trdTerm) {
-
-        if (CollectionUtils.isEmpty(trdTerm)) {
-            return new HashSet<>();
-        }
-
-        return trdTerm.stream().map(n -> {
-            Optional<TrdTerm> optionalTrdTerm = Optional.ofNullable(trdTermRepository.findOne(n.getTermNum()));
-            if (!optionalTrdTerm.isPresent()) {
-                throw new RuntimeException("Tag: " + n + " 값을 찾을 수 없습니다.");
-            }
-
-            TrdTerm trdTerm1 = optionalTrdTerm.get();
-            trdTerm1.trdTermUpdate(n);
-
-            return trdTerm1;
-        }).collect(Collectors.toSet());
-    }
+//    private Set<TrdTerm> getTrdTermList(Set<TrdTermDTO.Req> trdTerm) {
+//
+//        if (CollectionUtils.isEmpty(trdTerm)) {
+//            return new HashSet<>();
+//        }
+//
+//        return trdTerm.stream().map(n -> {
+//            Optional<TrdTerm> optionalTrdTerm = Optional.ofNullable(trdTermRepository.findOne(n.getTermNum()));
+//            if (!optionalTrdTerm.isPresent()) {
+//                throw new RuntimeException("Tag: " + n + " 값을 찾을 수 없습니다.");
+//            }
+//
+//            TrdTerm trdTerm1 = optionalTrdTerm.get();
+//            trdTerm1.trdTermUpdate(n);
+//
+//            return trdTerm1;
+//        }).collect(Collectors.toSet());
+//    }
 }
