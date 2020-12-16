@@ -66,6 +66,22 @@ public class TrdHeaderService {
 
     }
 
+    @Transactional
+    public void delete(TrdHeaderDTO.Req dto) {
+        for (TrdHeaderDTO.Req req : dto.getTrdHeader()) {
+
+            TrdHeader.TrdHeaderPk pk = TrdHeader.TrdHeaderPk.builder().tradeNum(req.getTradeNum()).tradeType(req.getTradeType()).build();
+            final TrdHeader trdHeader = trdHeaderRepository.findOne(pk);
+
+            if (trdHeader == null) {
+                throw new IllegalArgumentException("Data Not Found");
+            }
+
+            //trdHeader.trdHeaderUpdate(req.toEntity());
+            trdHeaderRepository.delete(trdHeader);
+        }
+    }
+
 //    private Set<TrdTerm> getTrdTermList(Set<TrdTermDTO.Req> trdTerm) {
 //
 //        if (CollectionUtils.isEmpty(trdTerm)) {

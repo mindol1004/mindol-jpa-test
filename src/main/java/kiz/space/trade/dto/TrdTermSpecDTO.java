@@ -24,11 +24,13 @@ public class TrdTermSpecDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Req {
         private Long tradeNum;
+        private Long termNum;
         private String termSpecCd;
 
         public TrdTermSpec toEntity() {
             return TrdTermSpec.builder()
                     .tradeNum(tradeNum)
+                    .termNum(termNum)
                     .termSpecCd(termSpecCd)
                     .build();
         }

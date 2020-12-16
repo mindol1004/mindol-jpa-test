@@ -27,9 +27,9 @@ public class TrdHeaderDTO {
         private Integer tradeType;
         private String tradeCd;
 
-        private Set<TrdHeaderDTO.Req> trdHeader;
+        private List<TrdHeaderDTO.Req> trdHeader;
 
-        private Set<TrdTermDTO.Req> trdTerm;
+        private List<TrdTermDTO.Req> trdTerm;
 
         public TrdHeader toEntity() {
             return TrdHeader.builder()

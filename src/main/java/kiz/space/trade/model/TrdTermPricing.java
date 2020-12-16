@@ -23,25 +23,27 @@ public class TrdTermPricing implements Serializable {
     private Long termPricingNum;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TERM_NUM")
+    @JoinColumn(name = "TERM_NUM", updatable = false)
     private TrdTerm trdTerm;
 
-    @Column(name = "TRADE_NUM")
+    @Column(name = "TRADE_NUM", updatable = false)
     private Long tradeNum;
 
     @Column(name = "TERM_PRICING_CD")
     private String termPricingCd;
 
-    @OneToMany(mappedBy = "trdTermPricing", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trdTermPricing", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TrdTermPricingComp> trdTermPricingComp = new HashSet<>();
 
     @Builder
     public TrdTermPricing(
+            Long termPricingNum,
             TrdTerm trdTerm,
             Long tradeNum,
             String termPricingCd,
             Set<TrdTermPricingComp> trdTermPricingComp
     ) {
+        this.termPricingNum = termPricingNum;
         this.trdTerm = trdTerm;
         this.tradeNum = tradeNum;
         this.termPricingCd = termPricingCd;

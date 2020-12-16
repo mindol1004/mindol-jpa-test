@@ -26,13 +26,15 @@ public class TrdTermPricingDTO {
     @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Req {
+        private Long termPricingNum;
         private Long tradeNum;
         private String termPricingCd;
 
-        private Set<TrdTermPricingCompDTO.Req> trdTermPricingComp;
+        private List<TrdTermPricingCompDTO.Req> trdTermPricingComp;
 
         public TrdTermPricing toEntity() {
             return TrdTermPricing.builder()
+                    .termPricingNum(termPricingNum)
                     .tradeNum(tradeNum)
                     .termPricingCd(termPricingCd)
                     .trdTermPricingComp(

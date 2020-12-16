@@ -20,14 +20,14 @@ public class TrdTermPricingComp implements Serializable {
     private Long termPricingCompNum;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TERM_PRICING_NUM")
+    @JoinColumn(name = "TERM_PRICING_NUM", updatable = false)
     private TrdTermPricing trdTermPricing;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TERM_NUM")
+    @JoinColumn(name = "TERM_NUM", updatable = false)
     private TrdTerm trdTerm;
 
-    @Column(name = "TRADE_NUM")
+    @Column(name = "TRADE_NUM", updatable = false)
     private Long tradeNum;
 
     @Column(name = "TERM_PRICING_COMP_CD")
@@ -35,11 +35,13 @@ public class TrdTermPricingComp implements Serializable {
 
     @Builder
     public TrdTermPricingComp(
+            Long termPricingCompNum,
             Long tradeNum,
             TrdTerm trdTerm,
             TrdTermPricing trdTermPricing,
             String termPricingCompCd
     ) {
+        this.termPricingCompNum = termPricingCompNum;
         this.tradeNum = tradeNum;
         this.trdTerm = trdTerm;
         this.trdTermPricing = trdTermPricing;

@@ -21,6 +21,11 @@ public class TrdHeaderController {
         trdHeaderService.update(dto);
     }
 
+    @DeleteMapping(value = "/api/trade")
+    public void delete(@RequestBody TrdHeaderDTO.Req dto) {
+        trdHeaderService.delete(dto);
+    }
+
     @GetMapping(value = "/api/trade/{tradeNum}")
     public ResponseBody findOne(@PathVariable Long tradeNum) {
         return (ResponseBody) trdHeaderService.findOne(tradeNum);

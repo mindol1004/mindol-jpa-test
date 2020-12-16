@@ -33,7 +33,7 @@ public class TrdTermDTO {
         private String termCd;
 
         private TrdTermSpecDTO.Req trdTermSpec;
-        private Set<TrdTermPricingDTO.Req> trdTermPricing;
+        private List<TrdTermPricingDTO.Req> trdTermPricing;
 
         public TrdTerm toEntity() {
             return TrdTerm.builder()

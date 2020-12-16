@@ -35,10 +35,10 @@ public class TrdTerm implements Serializable {
     @OneToOne(mappedBy = "trdTerm", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private TrdTermSpec trdTermSpec;
 
-    @OneToMany(mappedBy = "trdTerm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trdTerm", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TrdTermPricing> trdTermPricing = new HashSet<>();
 
-    @OneToMany(mappedBy = "trdTerm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trdTerm", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TrdTermPricingComp> trdTermPricingComp = new HashSet<>();
 
     @Builder
