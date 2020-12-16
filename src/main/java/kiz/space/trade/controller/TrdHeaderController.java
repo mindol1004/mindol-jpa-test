@@ -18,7 +18,7 @@ public class TrdHeaderController {
 
     @PutMapping(value = "/api/trade")
     public void update(@RequestBody TrdHeaderDTO.Req dto) {
-        //trdHeaderService.update(dto);
+        trdHeaderService.update(dto);
     }
 
     @GetMapping(value = "/api/trade/{tradeNum}")

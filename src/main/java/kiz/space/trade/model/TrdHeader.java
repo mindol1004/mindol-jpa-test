@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @IdClass(TrdHeader.TrdHeaderPk.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -60,13 +61,9 @@ public class TrdHeader implements Serializable {
         this.trdTerms = trdTerms;
     }
 
-    public void trdHeaderUpdate(TrdHeaderDTO.Req dto, Set<TrdTerm> trdTerms) {
-        this.tradeCd = dto.getTradeCd();
-        this.trdTerms = trdTerms;
+    public void trdHeaderUpdate(TrdHeader trdHeader) {
+        this.tradeCd = trdHeader.getTradeCd();
+        this.trdTerms = trdHeader.getTrdTerms();
     }
 
-//    public void addTrdTerm(TrdTerm trdTerm) {
-//        this.trdTerms.add(trdTerm);
-//        trdTerm.setTrdHeader(this);
-//    }
 }

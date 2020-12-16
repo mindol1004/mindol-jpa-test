@@ -39,6 +39,9 @@ public class TrdTermSpec implements Serializable {
     }
 
     public void setTrdTerm(TrdTerm trdTerm) {
+        if(this.trdTerm != null) {
+            this.trdTerm = null;
+        }
         this.trdTerm = trdTerm;
     }
 

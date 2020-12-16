@@ -1,5 +1,6 @@
 package kiz.space.trade.model;
 
+import kiz.space.trade.dto.TrdTermDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,8 +24,8 @@ public class TrdTerm implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name = "TRADE_NUM", referencedColumnName = "TRADE_NUM"),
-            @JoinColumn(name = "TRADE_TYPE", referencedColumnName = "TRADE_TYPE")
+            @JoinColumn(name = "TRADE_NUM", referencedColumnName = "TRADE_NUM", updatable = false),
+            @JoinColumn(name = "TRADE_TYPE", referencedColumnName = "TRADE_TYPE", updatable = false)
     })
     private TrdHeader trdHeader;
 
@@ -43,22 +44,17 @@ public class TrdTerm implements Serializable {
     @Builder
     public TrdTerm(
             TrdHeader trdHeader,
+            Long termNum,
             String termCd,
             TrdTermSpec trdTermSpec,
             Set<TrdTermPricing> trdTermPricing
     ) {
         this.trdHeader = trdHeader;
+        this.termNum = termNum;
         this.termCd = termCd;
         this.addTrdTermSpec(trdTermSpec);
-        this.addTermPricing(trdTermPricing);
+        this.addTrdTermPricing(trdTermPricing);
     }
-
-//    public void setTrdHeader(TrdHeader trdHeader) {
-//        this.trdHeader = trdHeader;
-//        if(trdHeader != null) {
-//            trdHeader.getTrdTerms().add(this);
-//        }
-//    }
 
     public void addTrdTermSpec(TrdTermSpec trdTermSpec) {
         this.trdTermSpec = trdTermSpec;
@@ -67,33 +63,17 @@ public class TrdTerm implements Serializable {
         }
     }
 
-    public void addTermPricing(Set<TrdTermPricing> trdTermPricing) {
-        this.trdTermPricing = trdTermPricing;
+    public void addTrdTermPricing(Set<TrdTermPricing> trdTermPricing) {
+        if(!this.trdTermPricing.contains(trdTermPricing)) {
+            this.trdTermPricing.addAll(trdTermPricing);
 
-        Optional<Set<TrdTermPricing>> trdTermPricingList = Optional.ofNullable(trdTermPricing);
-        trdTermPricingList.ifPresent(list -> list.forEach(item -> {
-            item.setTrdTerm(this);
-        }));
-
+            trdTermPricing.forEach(i -> {
+                i.setTrdTerm(this);
+                i.getTrdTermPricingComp().forEach(j -> {
+                    j.setTrdTerm(this);
+                });
+            });
+        }
     }
 
-//    public void trdTermUpdate(TrdTermDTO.Req dto) {
-//        this.termCd = dto.getTermCd();
-//    }
-//
-//    public void addTermPricing(TrdTermPricing trdTermPricing) {
-//        this.trdTermPricing.add(trdTermPricing);
-//        trdTermPricing.setTrdTerm(this);
-//
-//        Optional<Set<TrdTermPricingComp>> trdTermPricingComps = Optional.of(trdTermPricing.getTrdTermPricingComp());
-//        trdTermPricingComps.ifPresent(list -> list.forEach(item -> {
-//            this.addTermPricingComp(item);
-//        }));
-//
-//    }
-//
-//    public void addTermPricingComp(TrdTermPricingComp trdTermPricingComp) {
-//        this.trdTermPricingComp.add(trdTermPricingComp);
-//        trdTermPricingComp.setTrdTerm(this);
-//    }
 }

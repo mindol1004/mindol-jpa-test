@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,30 +32,37 @@ public class TrdTermPricing implements Serializable {
     @Column(name = "TERM_PRICING_CD")
     private String termPricingCd;
 
-    @OneToMany(mappedBy = "trdTerm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trdTermPricing", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<TrdTermPricingComp> trdTermPricingComp = new HashSet<>();
 
     @Builder
     public TrdTermPricing(
             TrdTerm trdTerm,
             Long tradeNum,
-            String termPricingCd
+            String termPricingCd,
+            Set<TrdTermPricingComp> trdTermPricingComp
     ) {
         this.trdTerm = trdTerm;
         this.tradeNum = tradeNum;
         this.termPricingCd = termPricingCd;
+        this.addTrdTermPricingComp(trdTermPricingComp);
     }
 
     public void setTrdTerm(TrdTerm trdTerm) {
-        this.trdTerm = trdTerm;
-        if(trdTerm != null) {
-            trdTerm.getTrdTermPricing().add(this);
+        if(this.trdTerm != null) {
+            this.trdTerm = null;
         }
+        this.trdTerm = trdTerm;
     }
 
-//    public void addTermPricingComp(TrdTermPricingComp trdTermPricingComp) {
-//        this.trdTermPricingComp.add(trdTermPricingComp);
-//        trdTermPricingComp.setTrdTermPricing(this);
-//    }
+    public void addTrdTermPricingComp(Set<TrdTermPricingComp> trdTermPricingComp) {
+        if(!Arrays.asList(this.trdTermPricingComp).contains(trdTermPricingComp)) {
+            this.trdTermPricingComp.addAll(trdTermPricingComp);
+
+            trdTermPricingComp.forEach(i -> {
+                i.setTrdTermPricing(this);
+            });
+        }
+    }
 
 }

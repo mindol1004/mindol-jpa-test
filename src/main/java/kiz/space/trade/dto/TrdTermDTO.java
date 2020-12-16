@@ -28,6 +28,7 @@ public class TrdTermDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Req {
         private Long tradeNum;
+        private Long termNum;
         private Integer tradeType;
         private String termCd;
 
@@ -37,7 +38,8 @@ public class TrdTermDTO {
         public TrdTerm toEntity() {
             return TrdTerm.builder()
                     .trdHeader(TrdHeader.builder().tradeNum(tradeNum).tradeType(tradeType).build())
-                    .termCd(this.termCd)
+                    .termNum(termNum)
+                    .termCd(termCd)
                     .trdTermSpec(
                         Optional.ofNullable(trdTermSpec)
                             .map(n -> {

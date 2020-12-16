@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,6 +35,15 @@ public class TrdTermPricingDTO {
             return TrdTermPricing.builder()
                     .tradeNum(tradeNum)
                     .termPricingCd(termPricingCd)
+                    .trdTermPricingComp(
+                        Optional.ofNullable(trdTermPricingComp)
+                            .map(n -> {
+                                return n.stream().map(i -> {
+                                    i.setTradeNum(tradeNum);
+                                    return i.toEntity();
+                                }).collect(Collectors.toSet());
+                            }).orElseGet(() -> new HashSet<>())
+                    )
                     .build();
         }
     }

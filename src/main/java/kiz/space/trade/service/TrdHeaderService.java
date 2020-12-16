@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,6 +23,9 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class TrdHeaderService {
+
+    @PersistenceContext
+    private final EntityManager em;
 
     private final TrdHeaderRepository trdHeaderRepository;
     private final TrdTermRepository trdTermRepository;
@@ -35,73 +40,31 @@ public class TrdHeaderService {
 
         for (TrdHeaderDTO.Req req : dto.getTrdHeader()) {
 
-            //Long termNum = trdHeaderRepository.getTermNum();
+            TrdHeader trdHeader = req.toEntity();
 
-//            Optional<Set<TrdTermDTO.Req>> trdTerms = Optional.ofNullable(req.getTrdTerm());
-//
-//            trdTerms.ifPresent(list -> list.forEach(item -> {
-//                final TrdTerm trdTerm = item.toEntity();
-//                trdTerm.addTrdTermSpec(item.getTrdTermSpec().toEntity());
-//            }));
-
-            //TrdHeader trdHeader =  req.toEntity();
-
-            trdHeaderRepository.save(req.toEntity());
-
-//            Set<TrdTerm> trdTerm = req.getTrdTerm().stream().map(n -> {
-//                n.setTradeNum(req.getTradeNum());
-//                n.setTradeType(req.getTradeType());
-//                return n.toEntity();
-//            }).collect(Collectors.toSet());
-//
-//            System.out.println(trdTerm.toString());
-
-            //final TrdHeader trdHeader = req.toEntity();
-
-//            Optional<Set<TrdTermDTO.Req>> trdTerms = Optional.ofNullable(req.getTrdTerm());
-//
-//            trdTerms.ifPresent(list -> list.forEach(item -> {
-//                final TrdTerm trdTerm = item.toEntity();
-//
-//                Set<TrdTermPricingDTO.Req> trdTermPricings = item.getTrdTermPricing();
-//                trdTermPricings.forEach(subItem -> {
-//                    subItem.setTradeNum(req.getTradeNum());
-//
-//                    final TrdTermPricing trdTermPricing = subItem.toEntity();
-//
-//                    Optional<Set<TrdTermPricingCompDTO.Req>> trdTermPricingComps = Optional.ofNullable(subItem.getTrdTermPricingComp());
-//                    trdTermPricingComps.ifPresent(subSubList -> subSubList.forEach(subSubItem -> {
-//                        subSubItem.setTradeNum(req.getTradeNum());
-//                        trdTermPricing.addTermPricingComp(subSubItem.toEntity());
-//                    }));
-//                    trdTerm.addTermPricing(trdTermPricing);
-//                });
-//
-//                trdHeader.addTrdTerm(trdTerm);
-//            }));
-
-            //trdHeaderRepository.save(trdHeader);
+            trdHeaderRepository.save(trdHeader);
         }
 
     }
 
-//    @Transactional
-//    public void update(TrdHeaderDTO.Req dto) {
-//
-//        for (TrdHeaderDTO.Req req : dto.getTrdHeader()) {
-//
-//            TrdHeader.TrdHeaderPk pk = TrdHeader.TrdHeaderPk.builder().tradeNum(req.getTradeNum()).tradeType(req.getTradeType()).build();
-//            final TrdHeader trdHeader = trdHeaderRepository.findOne(pk);
-//
-//            if (trdHeader == null) {
-//                throw new IllegalArgumentException("Data Not Found");
-//            }
-//
-//            trdHeader.trdHeaderUpdate(req, this.getTrdTermList(req.getTrdTerm()));
-//
-//        }
-//
-//    }
+    @Transactional
+    public void update(TrdHeaderDTO.Req dto) {
+
+        for (TrdHeaderDTO.Req req : dto.getTrdHeader()) {
+
+            TrdHeader.TrdHeaderPk pk = TrdHeader.TrdHeaderPk.builder().tradeNum(req.getTradeNum()).tradeType(req.getTradeType()).build();
+            final TrdHeader trdHeader = trdHeaderRepository.findOne(pk);
+
+            if (trdHeader == null) {
+                throw new IllegalArgumentException("Data Not Found");
+            }
+
+            trdHeader.trdHeaderUpdate(req.toEntity());
+            trdHeaderRepository.save(trdHeader);
+            //em.detach(trdHeader);
+        }
+
+    }
 
 //    private Set<TrdTerm> getTrdTermList(Set<TrdTermDTO.Req> trdTerm) {
 //
@@ -110,15 +73,15 @@ public class TrdHeaderService {
 //        }
 //
 //        return trdTerm.stream().map(n -> {
-//            Optional<TrdTerm> optionalTrdTerm = Optional.ofNullable(trdTermRepository.findOne(n.getTermNum()));
+//            Optional<TrdTerm> optionalTrdTerm = Optional.ofNullable(trdTermRepository.findByTermNum(n.getTermNum()));
 //            if (!optionalTrdTerm.isPresent()) {
 //                throw new RuntimeException("Tag: " + n + " 값을 찾을 수 없습니다.");
 //            }
-//
 //            TrdTerm trdTerm1 = optionalTrdTerm.get();
-//            trdTerm1.trdTermUpdate(n);
+//            trdTerm1.updateTrdTerm(n);
 //
 //            return trdTerm1;
 //        }).collect(Collectors.toSet());
 //    }
+
 }
