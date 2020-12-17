@@ -1,15 +1,11 @@
 package kiz.space.trade.model;
 
-import kiz.space.trade.dto.TrdHeaderDTO;
-import kiz.space.trade.dto.TrdTermDTO;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @IdClass(TrdHeader.TrdHeaderPk.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -45,7 +41,7 @@ public class TrdHeader implements Serializable {
     @Column(name = "TRADE_CD")
     private String tradeCd;
 
-    @OneToMany(mappedBy = "trdHeader", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trdHeader", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TrdTerm> trdTerms = new HashSet<>();
 
     @Builder

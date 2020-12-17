@@ -1,12 +1,12 @@
 package kiz.space.trade.dto;
 
 import kiz.space.trade.model.TrdHeader;
+import kiz.space.trade.model.TrdTerm;
 import kiz.space.trade.model.TrdTermPricing;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import kiz.space.trade.model.TrdTermSpec;
+import lombok.*;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
 import java.util.HashSet;
 import java.util.List;
@@ -53,18 +53,44 @@ public class TrdTermPricingDTO {
     @Getter
     @Setter
     public static class Res {
-        private Long tradeNum;
 
-        public static TrdTermPricingDTO.Res of(TrdTermPricing trdTermPricing) {
-            ModelMapper modelMapper = new ModelMapper();
-            return modelMapper.map(trdTermPricing, TrdTermPricingDTO.Res.class);
+        private TrdTermPricingDTO.Mapper trdTermPricing;
+        private List<TrdTermPricingDTO.Mapper> trdTermPricingList;
+
+        @Builder
+        public Res(
+                TrdTermPricingDTO.Mapper trdTermPricing,
+                List<TrdTermPricingDTO.Mapper> trdTermPricingList
+        ) {
+            this.trdTermPricing = trdTermPricing;
+            this.trdTermPricingList = trdTermPricingList;
         }
 
-        public static List<TrdTermPricingDTO.Res> of(List<TrdTermPricing> trdTermPricing) {
+    }
+
+    @Getter
+    @Setter
+    public static class Mapper {
+        private Long termPricingNum;
+        private Long termNum;
+        private Long tradeNum;
+        private String termPricingCd;
+
+        public static TrdTermPricingDTO.Mapper of(TrdTermPricing trdTermPricing) {
+            ModelMapper modelMapper = new ModelMapper();
+            modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+            modelMapper.typeMap(TrdTerm.class, TrdTermDTO.Mapper.class)
+                    .addMapping(dto -> trdTermPricing.getTrdTerm().getTermNum(), TrdTermDTO.Mapper::setTermNum);
+
+            return modelMapper.map(trdTermPricing, TrdTermPricingDTO.Mapper.class);
+        }
+
+        public static List<TrdTermPricingDTO.Mapper> of(List<TrdTermPricing> trdTermPricing) {
             return trdTermPricing.stream()
-                    .map(TrdTermPricingDTO.Res::of)
+                    .map(TrdTermPricingDTO.Mapper::of)
                     .collect(Collectors.toList());
         }
+
     }
 
 }

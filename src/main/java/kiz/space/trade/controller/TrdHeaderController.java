@@ -26,9 +26,9 @@ public class TrdHeaderController {
         trdHeaderService.delete(dto);
     }
 
-    @GetMapping(value = "/api/trade/{tradeNum}")
-    public ResponseBody findOne(@PathVariable Long tradeNum) {
-        return (ResponseBody) trdHeaderService.findOne(tradeNum);
+    @GetMapping(value = "/api/trade/{tradeNum}/type/{tradeType}/termNum/{termNum}")
+    public Object findOne(@PathVariable Long tradeNum, @PathVariable Integer tradeType, @PathVariable Long termNum) {
+        return trdHeaderService.findOne(tradeNum, tradeType, termNum);
     }
 
 }

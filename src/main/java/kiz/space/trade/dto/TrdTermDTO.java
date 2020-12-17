@@ -3,11 +3,9 @@ package kiz.space.trade.dto;
 import kiz.space.trade.model.TrdHeader;
 import kiz.space.trade.model.TrdTerm;
 import kiz.space.trade.model.TrdTermPricing;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
 import java.util.HashSet;
 import java.util.List;
@@ -63,21 +61,41 @@ public class TrdTermDTO {
     @Getter
     @Setter
     public static class Res {
+
+        private TrdTermDTO.Mapper trdTerm;
+
+        @Builder
+        public Res(
+                TrdTermDTO.Mapper trdTerm
+        ) {
+            this.trdTerm = trdTerm;
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class Mapper {
         private Long termNum;
         private Long tradeNum;
         private Integer tradeType;
         private String termCd;
 
-        public static TrdTermDTO.Res of(TrdTerm trdTerm) {
+        public static TrdTermDTO.Mapper of(TrdTerm trdTerm) {
             ModelMapper modelMapper = new ModelMapper();
-            return modelMapper.map(trdTerm, TrdTermDTO.Res.class);
+            modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+            modelMapper.typeMap(TrdTerm.class, TrdTermDTO.Mapper.class)
+                    .addMapping(dto -> trdTerm.getTrdHeader().getTradeNum(), TrdTermDTO.Mapper::setTradeNum)
+                    .addMapping(dto -> trdTerm.getTrdHeader().getTradeType(), TrdTermDTO.Mapper::setTradeType);
+
+            return modelMapper.map(trdTerm, TrdTermDTO.Mapper.class);
         }
 
-        public static List<TrdTermDTO.Res> of(List<TrdTerm> trdTerms) {
+        public static List<TrdTermDTO.Mapper> of(List<TrdTerm> trdTerms) {
             return trdTerms.stream()
-                    .map(TrdTermDTO.Res::of)
+                    .map(TrdTermDTO.Mapper::of)
                     .collect(Collectors.toList());
         }
+
     }
 
 }

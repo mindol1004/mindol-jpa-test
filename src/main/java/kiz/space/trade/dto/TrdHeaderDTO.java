@@ -1,14 +1,13 @@
 package kiz.space.trade.dto;
 
 import kiz.space.trade.model.TrdHeader;
-import kiz.space.trade.model.TrdTerm;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TrdHeaderDTO {
@@ -53,19 +52,46 @@ public class TrdHeaderDTO {
     @Getter
     @Setter
     public static class Res {
+
+        private TrdHeaderDTO.Mapper trdHeader;
+        private TrdTermDTO.Mapper trdTerm;
+        private TrdTermSpecDTO.Mapper trdTermSpec;
+        private List<TrdTermPricingDTO.Mapper> trdTermPricing;
+
+        @Builder
+        public Res(
+                TrdHeaderDTO.Mapper trdHeader,
+                TrdTermDTO.Mapper trdTerm,
+                TrdTermSpecDTO.Mapper trdTermSpec,
+                List<TrdTermPricingDTO.Mapper> trdTermPricing
+        ) {
+            this.trdHeader = trdHeader;
+            this.trdTerm = trdTerm;
+            this.trdTermSpec = trdTermSpec;
+            this.trdTermPricing = trdTermPricing;
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class Mapper {
         private Long tradeNum;
         private Integer tradeType;
+        private String tradeCd;
 
-        public static TrdHeaderDTO.Res of(TrdHeader trdHeader) {
+        public static Mapper of(TrdHeader trdHeader) {
             ModelMapper modelMapper = new ModelMapper();
-            return modelMapper.map(trdHeader, TrdHeaderDTO.Res.class);
+            modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+            return modelMapper.map(trdHeader, TrdHeaderDTO.Mapper.class);
         }
 
-        public static List<TrdHeaderDTO.Res> of(List<TrdHeader> trdHeaders) {
+        public static List<TrdHeaderDTO.Mapper> of(List<TrdHeader> trdHeaders) {
             return trdHeaders.stream()
-                    .map(TrdHeaderDTO.Res::of)
+                    .map(TrdHeaderDTO.Mapper::of)
                     .collect(Collectors.toList());
         }
+
     }
     
 }
